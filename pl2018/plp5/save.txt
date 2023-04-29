@@ -1,0 +1,173 @@
+S 	    : algoritmo dospto id SDec SInstr falgoritmo
+		;
+SDec 	: Dec
+		| {}
+		;
+Dec 	: var DVar MDVar fvar
+		| Tipo dospto id LId pyc
+		;
+MDVar 	: DVar MDVar
+		| {}
+		;
+LId 	: coma id LId
+		| {}
+		;
+Tipo 	: entero
+		| real
+		| logico
+		| tabla nentero de Tipo
+		;
+SInstr 	: SInstr pyc Instr
+		| Instr
+		;
+Instr 	: escribe Expr
+		| lee Ref
+		| si Expr entonces Instr
+		| si Expr entonces Instr sino Instr
+		| mientras Expr hacer Instr
+		| Ref opasig Expr
+        {
+            std::cout << "hola\n";
+        }
+		| blq SInstr fblq
+		;
+Expr 	: Expr obool Econj
+		| Econj
+		;
+Econj 	: Econj ybool Ecomp
+		| Ecomp
+		| Esimple oprel Esimple
+		| Esimple
+		;
+Esimple : Esimple opas Term
+		| Term
+		| opas Term
+		;
+Term 	: Term opmd Factor
+		| Factor
+		;
+Factor 	: Ref
+		| nentero
+		| nreal
+		| pari Expr pard
+		| nobool Factor
+		| cierto
+		| falso
+		;
+Ref 	: id
+		| Ref cori Esimple cord
+		;
+
+
+
+/////////////////////////////
+
+
+S       : algoritmo dospto id SDec SInstr falgoritmo
+        {
+            $$.cod = $5.cod + "halt";
+        }
+        ;
+SDec    : Dec
+        | {}
+        ;
+Dec     : var { numVariables = 0; } DVar MDVar fvar
+        ;
+DVar    : Tipo dospto id LId pyc
+        {
+            tS.add(Symbol($3.lexema, ++globalDirection, $1.tipo));
+            ++numVariables;
+            for(unsigned int i = 0 ; i < llids.size(); ++i)
+            {
+                if(tS.add(Symbol(llids[i], ++globalDirection, $1.tipo)))
+                    ++numVariables;
+                else msgError(ERRYADECL, nlin, ncol, llids[i].c_str());
+            }
+            llids.clear(); // Erase the vector for new llids.
+        }
+        ;
+MDVar   : DVar MDVar
+        | {}
+        ;
+LId     : coma id LId
+        {
+            llids.push_back($2.lexema); // Recursive add.
+        }
+        | {} // Recursive stop.
+        ;
+Tipo    : entero { $$.tipo = static_cast<int>(Types::Integer); }
+        | real { $$.tipo = static_cast<int>(Types::Real); }
+        | logico { $$.tipo = static_cast<int>(Types::Logical); }
+        | tabla nentero de Tipo
+        {
+            tS.tT.add(atoi($2.lexema), $4.tipo); // Add a new type, with the base type.
+            $$.tipo = tS.tT.getType();           // Return the current type.
+        }
+        ;
+SInstr  : SInstr pyc Instr
+        | Instr
+        ;
+Instr   : escribe Expr
+        | lee Ref
+        | si Expr entonces Instr
+        {
+            if($2.tipo != static_cast<int>(Types::Logical)) msgError(ERR_EXP_LOG, nlin, ncol, "");
+        }
+        | si Expr entonces Instr sino Instr
+        {
+            if($2.tipo != static_cast<int>(Types::Logical)) msgError(ERR_EXP_LOG, nlin, ncol, "");
+        }
+        | mientras Expr hacer Instr
+        {
+            if($2.tipo != static_cast<int>(Types::Logical)) msgError(ERR_EXP_LOG, nlin, ncol, "");
+        }
+        | Ref opasig Expr
+        {
+            std::cout << "hola\n";
+            globalDirection = globDirecStart + numVariables;
+            tS.eraseNotVariables(numVariables); // Restore temporals.
+        }
+        | blq SInstr fblq
+        ;
+Expr    : Expr obool Econj
+        | Econj
+        ;
+Econj   : Econj ybool Ecomp
+        | Ecomp
+        ;
+Ecomp   : Esimple oprel Esimple
+        | Esimple
+        ;
+
+Esimple : Esimple opas Term
+        {
+            std::string operand = $2.lexema == "+" ? "add" : "subb";
+            operand += $1.tipo == static_cast<int>(Types::Integer) ? "i" : "r";
+        }
+        | Term
+        {
+            std::cout << " " << $1.lexema;
+            tS.search($1.lexema);
+        }
+        | opas Term
+        ;
+Term    : Term opmd Factor
+        | Factor
+        ;
+Factor  : Ref
+        | nentero
+        {
+            tS.add(Symbol($1.lexema, ++globalDirection, static_cast<int>(Types::Integer), std::atof($1.lexema)));
+        }
+        | nreal
+        {
+            tS.add(Symbol($1.lexema, ++globalDirection, static_cast<int>(Types::Real), std::atof($1.lexema)));
+        }
+        | pari Expr pard
+        | nobool Factor
+        | cierto
+        | falso
+        ;
+Ref     : id { $$.trad = $1.lexema; }
+        | Ref lcor Esimple rcor
+        ;

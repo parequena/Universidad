@@ -1,0 +1,16 @@
+mpicc master_servant.c -o master_servant
+mpirun --hostfile hostfile hello
+
+mpdboot -n 3 -f hostfile -r rsh --verbose
+mpiexec -n 3 master_servant
+
+mpdtrace -l
+mpdlistjobs
+top
+
+
+http://dvbmonkey.wordpress.com/2009/03/02/an-open-mpi-master-servant-example/
+http://dvbmonkey.wordpress.com/2009/02/27/getting-started-with-open-mpi-on-fedora/
+https://docs.it4i.cz/anselm-cluster-documentation/software/mpi-1/Running_OpenMPI
+http://blogs.ua.es/labseps/2014/02/20/instalacion-configuracion-y-prueba-de-mpich2-version-1-0-8-en-los-laboratorios-de-la-eps/
+http://wiki.lazarus.freepascal.org/MPICH

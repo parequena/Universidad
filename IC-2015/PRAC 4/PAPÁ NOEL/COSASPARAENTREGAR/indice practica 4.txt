@@ -1,0 +1,9 @@
+Indice Práctica 4:
+
+1. Introducción. Objetivos de la práctica
+2. Planteamiento de la solución. Justificación de la paralelización realizada (Importante, como influye)
+3. Plan de trabajo. Actividades y tareas
+4. Resultados. Evaluación de rendimiento en función de la carga para al paralelización a nivel de proceso SOLO (Utilizar mismo PC y mismas imágenes)
+5. Comparación de resultados en función de la carga (P2, P3 y P4)
+6. Conclusiones 
+7. Referencias y bibliografía

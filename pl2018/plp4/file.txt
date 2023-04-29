@@ -1,0 +1,13 @@
+float g()
+{
+  int a;
+  float b;
+
+  if (111)
+    a = 12+3;
+  {
+    float i;
+
+    b = 1.2 + 3.4 + 5.6;
+  }
+}

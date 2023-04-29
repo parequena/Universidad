@@ -1,0 +1,4 @@
+algoritmo : ok05
+escribe falso && ! falso || cierto && cierto && cierto  
+// Debe salir "c" (cierto)
+falgoritmo

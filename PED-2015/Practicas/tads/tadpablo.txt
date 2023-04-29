@@ -1,0 +1,46 @@
+int
+main(void)
+{
+
+TABBCalendario a,b,c;
+TVectorCalendario vec1, vec2, vec3, vec4, vec5, vec6;
+
+TCalendario c1(1,1,2011,"Fecha1");
+TCalendario c2(2,1,2011,"Fecha2");
+TCalendario c3(3,1,2011,"Fecha3");
+TCalendario c4(4,1,2011,"Fecha4");
+TCalendario c5(5,1,2011,"Fecha5");
+TCalendario c6(6,1,2011,"Fecha6");
+
+a.Insertar(c5);
+a.Insertar(c2);
+a.Insertar(c1);
+a.Insertar(c3);
+a.Insertar(c6);
+
+
+b.Insertar(c4);
+
+vec1 = a.Inorden();
+vec2 = a.Preorden();
+vec3 = a.Postorden();
+vec4 = c.Inorden();
+vec5 = c.Preorden();
+vec6 = c.Postorden();
+
+cout << "vec1-InordenA: " << vec1 << endl;
+cout << "vec2-PreordenA: " << vec2 << endl;
+cout << "vec3-PostordenA: " << vec3 << endl << endl;
+
+c=a;
+
+cout << "vec1-InordenA: " << vec1 << endl;
+cout << "vec2-PreordenA: " << vec2 << endl;
+cout << "vec3-PostordenA: " << vec3 << endl;
+cout << "vec4-InordenC: " << vec4 << endl;
+cout << "vec5-PreordenC: " << vec6 << endl;
+cout << "vec6-PostordenC: " << vec6 << endl;
+
+return 0;
+}
+

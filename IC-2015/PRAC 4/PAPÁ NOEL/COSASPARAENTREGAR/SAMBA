@@ -1,0 +1,1 @@
+sudo mount -t cifs //esteban-VirtualBox1/ICPRACTICA4 ICPRACTICA4/
